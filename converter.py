@@ -8,7 +8,7 @@ csv_file_path = sys.argv[1]
 sqlite_file_path = sys.argv[2]
 user_id = sys.argv[3]
 zone = sys.argv[4]
-color = -65382
+color = -12566464
 archived = 'false'
 worktime = 0
 time_local = 0
@@ -50,7 +50,7 @@ def insert_row(row, owner_m, owner_l):
         user_id,
         get_time(row['Start time']),
         get_time(row['Stop time']),
-        1,
+        0,
         None,
         zone,
         zone,

@@ -19,14 +19,14 @@ con = sqlite3.connect(sqlite_file_path)
 cur = con.cursor()
 
 
-def handle_time_tree(customer, parent_uuid_m, parent_uuid_l, expanded):
+def handle_time_tree(name, parent_uuid_m, parent_uuid_l, expanded):
     cur.execute('select uuidM, uuidL from jiffy_time_tree where name = ?', (customer,))
     result = cur.fetchone()
     if result is None:
         result = (get_uuid(), get_uuid())
         cur.execute('insert into jiffy_time_tree values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', (
             user_id,
-            customer,
+            name,
             color,
             archived,
             worktime,
@@ -83,10 +83,10 @@ with open(csv_file_path) as csv_file:
     for row in reader:
         customer = handle_time_tree(row['Customer'], 0, 0, 'false')
         project = handle_time_tree(row['Project'], customer[0], customer[1], 'true')
-        task = handle_time_tree(row['Task'], project[0], project[1], 'false')
-        if task is None:
+        if row['Task'] == "":
             insert_row(row, project[0], project[1])
         else:
+            task = handle_time_tree(row['Task'], project[0], project[1], 'false')
             insert_row(row, task[0], task[1])
 
 con.commit()
